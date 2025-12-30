@@ -4,15 +4,15 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    nvim-config = {
-      url = "github:<YOU>/nvim-config";
+    nixvim = {
+      url = "github:Bullish-Design/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nvim-config, ... }: {
+  outputs = { self, nixvim, ... }: {
     homeManagerModules.terminal = import ./modules/terminal.nix {
-      inherit nvim-config;
+      inherit nixvim;
     };
   };
 }
