@@ -1,8 +1,8 @@
-{ nvim-config }:
+{ nixvim }:
 { pkgs, ... }:
 {
   imports = [
-    nvim-config.homeManagerModules.default
+    nixvim.homeManagerModules.default
   ];
 
   # Minimal terminal “profile” extras
