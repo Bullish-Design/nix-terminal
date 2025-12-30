@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixvim = {
-      url = "github:Bullish-Design/nixvim";
+      url = "github:Bullish-Design/nixvim/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
