@@ -10,7 +10,7 @@
     };
 
     devman = {
-      url = "github:Bullish-Design/devman/main";
+      url = "github:Bullish-Design/devman/nixos";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
