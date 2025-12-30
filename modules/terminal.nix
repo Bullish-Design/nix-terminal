@@ -1,4 +1,4 @@
-{ nixvim }:
+{ nixvim, devman }:
 { pkgs, ... }:
 {
   imports = [
@@ -8,9 +8,13 @@
   # Minimal terminal “profile” extras
   programs.git.enable = true;
 
-  home.packages = with pkgs; [
-    tree
-    jq
-  ];
+  home.packages =
+    (with pkgs; [
+      tree
+      jq
+    ])
+    ++ [
+      devman.packages.${pkgs.system}.default
+    ];
 }
 
