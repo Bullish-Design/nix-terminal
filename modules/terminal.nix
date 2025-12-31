@@ -10,6 +10,7 @@ in
   imports = [
     ./zsh
     ./atuin
+    nixvim.homeManagerModules.default
   ];
 
   options.programs.nix-terminal = {
@@ -22,16 +23,7 @@ in
     };
   };
 
-  config = mkMerge [
-    # Always import nixvim
-    {
-      imports = [
-        nixvim.homeManagerModules.default
-      ];
-    }
-
-    # Core terminal configuration
-    (mkIf cfg.enable {
+  config = mkIf cfg.enable {
       # Git configuration
       programs.git = {
         enable = true;
@@ -56,7 +48,6 @@ in
       ]) ++ [
         devman.packages.${pkgs.system}.devman-tools
       ] ++ cfg.extraPackages;
-    })
-  ];
+  };
 }
 
