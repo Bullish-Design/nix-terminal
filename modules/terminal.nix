@@ -14,7 +14,7 @@
       jq
     ])
     ++ [
-      devman.packages.${pkgs.system}.default
+      devman.packages.${pkgs.system}.devman-tools
     ];
 }
 
