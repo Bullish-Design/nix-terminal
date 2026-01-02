@@ -3,6 +3,11 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    
+    nixbuild = {
+      url = "github:Bullish-Design/nixbuild";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nixvim = {
       url = "github:Bullish-Design/nixvim/main";
@@ -15,9 +20,9 @@
     };
   };
 
-  outputs = { self, nixvim, devman, ... }: {
+  outputs = { self, nixvim, devman, nixbuild, ... }: {
     homeManagerModules.terminal = import ./modules/terminal.nix {
-      inherit nixvim devman;
+      inherit nixvim devman nixbuild;
     };
   };
 }
