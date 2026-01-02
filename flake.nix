@@ -21,8 +21,16 @@
   };
 
   outputs = { self, nixvim, devman, nixbuild, ... }: {
-    homeManagerModules.terminal = import ./modules/terminal.nix {
-      inherit nixvim devman nixbuild;
+    # homeManagerModules.terminal = import ./modules/terminal.nix {
+    #   inherit nixvim devman nixbuild;
+    # };
+    homeManagerModules = {
+      terminal = import ./modules/terminal.nix {
+        inherit nixvim devman;
+      };
+      nixbuild = import ./modules/nixbuild.nix { 
+        inherit nixbuild; 
+      };
     };
   };
 }
