@@ -10,6 +10,7 @@ in
   imports = [
     ./zsh
     ./atuin
+    ./scripts
     nixvim.homeManagerModules.default
   ];
 
