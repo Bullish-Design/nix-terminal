@@ -3,22 +3,22 @@
 with lib;
 
 let
-  cfg = config.programs.nix-terminal;
+  cfg = config.programs.nix-terminal.zsh;
 in
 {
-  config = mkIf (cfg.enable && cfg.zsh.enable) {
+  config = mkIf (config.programs.nix-terminal.enable && cfg.enable) {
     # Zsh configuration
     programs.zsh = {
       enable = true;
-      enableCompletion = cfg.zsh.enableCompletion;
-      autosuggestion.enable = cfg.zsh.enableAutosuggestions;
-      syntaxHighlighting.enable = cfg.zsh.enableSyntaxHighlighting;
+      enableCompletion = cfg.enableCompletion;
+      autosuggestion.enable = cfg.enableAutosuggestions;
+      syntaxHighlighting.enable = cfg.enableSyntaxHighlighting;
 
-      shellAliases = cfg.zsh.aliases;
+      shellAliases = cfg.aliases;
 
       history = {
-        size = 10000;
-        path = "${config.xdg.dataHome}/zsh/history";
+        size = cfg.historySize;
+        path = cfg.historyPath;
         ignoreDups = true;
         ignoreSpace = true;
         expireDuplicatesFirst = true;
@@ -69,67 +69,14 @@ in
           alias cat='bat --style=auto'
         fi
 
-        ${cfg.zsh.extraConfig}
+        ${cfg.extraConfig}
       '';
     };
 
     # Starship prompt
-    programs.starship = mkIf (cfg.zsh.theme == "starship") {
+    programs.starship = mkIf (cfg.theme == "starship") {
       enable = true;
-      settings = {
-        add_newline = true;
-        format = lib.concatStrings [
-          "$username"
-          "$hostname"
-          "$directory"
-          "$git_branch"
-          "$git_state"
-          "$git_status"
-          "$cmd_duration"
-          "$line_break"
-          "$python"
-          "$character"
-        ];
-
-        character = {
-          success_symbol = "[➜](bold green)";
-          error_symbol = "[➜](bold red)";
-        };
-
-        directory = {
-          truncation_length = 3;
-          truncate_to_repo = true;
-          style = "bold cyan";
-        };
-
-        git_branch = {
-          symbol = " ";
-          style = "bold purple";
-        };
-
-        git_status = {
-          conflicted = "🏳";
-          ahead = "⇡\${count}";
-          behind = "⇣\${count}";
-          diverged = "⇕⇡\${ahead_count}⇣\${behind_count}";
-          untracked = "🤷";
-          stashed = "📦";
-          modified = "📝";
-          staged = "[++($count)](green)";
-          renamed = "👅";
-          deleted = "🗑";
-        };
-
-        cmd_duration = {
-          min_time = 500;
-          format = "underwent [$duration](bold yellow)";
-        };
-
-        python = {
-          symbol = " ";
-          style = "yellow bold";
-        };
-      };
+      settings = config.programs.nix-terminal.starshipSettings;
     };
 
     # FZF configuration for better fuzzy finding
