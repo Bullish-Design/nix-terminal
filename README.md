@@ -98,6 +98,73 @@ nix shell github:Bullish-Design/nix-terminal
 nix profile install github:Bullish-Design/nix-terminal
 ```
 
+## New Modules
+
+The flake now exports multiple Home Manager modules:
+
+- `homeManagerModules.terminal`: Core terminal environment (zsh, atuin, nixvim)
+- `homeManagerModules.nixbuild`: nixos-rebuild tester integration
+
+## Usage
+
+Import the modules you want and enable their options:
+
+```nix
+{ inputs, ... }:
+{
+  imports = [
+    inputs.nix-terminal.homeManagerModules.terminal
+    inputs.nix-terminal.homeManagerModules.nixbuild
+  ];
+
+  programs.nix-terminal.enable = true;
+  programs.nixbuild.enable = true;
+}
+```
+
+Example configuration for nixbuild:
+
+```nix
+programs.nixbuild = {
+  enable = true;
+  outputDir = "~/.nixbuild-logs";
+  defaultAction = "test";
+  keepLast = 10;
+  enableRecording = true;
+};
+```
+
+## Integration with nix-meta
+
+If you are using `nix-meta`, include the terminal modules alongside it:
+
+```nix
+{ inputs, ... }:
+{
+  imports = [
+    inputs.nix-meta.homeManagerModules.default
+    inputs.nix-terminal.homeManagerModules.terminal
+    inputs.nix-terminal.homeManagerModules.nixbuild
+  ];
+
+  programs.nix-terminal.enable = true;
+  programs.nixbuild.enable = true;
+}
+```
+
+## Testing
+
+```bash
+nix flake check
+```
+
+## Migration Checklist
+
+- [ ] Add `inputs.nix-terminal.homeManagerModules.terminal` and/or `inputs.nix-terminal.homeManagerModules.nixbuild` to your imports.
+- [ ] Enable modules with `programs.nix-terminal.enable = true;` and/or `programs.nixbuild.enable = true;`.
+- [ ] Move any old shell aliases into `programs.nix-terminal.zsh.aliases`.
+- [ ] Review nixbuild defaults (`outputDir`, `defaultAction`, `keepLast`, `enableRecording`) and override as needed.
+
 ## Configuration
 
 All aspects are configurable:
