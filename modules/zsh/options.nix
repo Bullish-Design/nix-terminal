@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -36,26 +36,26 @@ with lib;
 
     aliases = mkOption {
       type = types.attrsOf types.str;
-      default = {
-        ll = "ls -lah";
-        la = "ls -A";
-        l = "ls -CF";
-        ".." = "cd ..";
-        "..." = "cd ../..";
-        grep = "grep --color=auto";
-        gst = "git status";
-        gd = "git diff";
-        gc = "git commit";
-        gp = "git push";
-        gl = "git log --oneline --graph --decorate";
-      };
-      description = "Shell aliases";
+      default = {};
+      description = "Shell aliases (override to customize)";
     };
 
     extraConfig = mkOption {
       type = types.lines;
       default = "";
       description = "Extra zsh configuration";
+    };
+
+    historySize = mkOption {
+      type = types.int;
+      default = 10000;
+      description = "Number of commands to keep in history";
+    };
+
+    historyPath = mkOption {
+      type = types.str;
+      default = "${config.xdg.dataHome}/zsh/history";
+      description = "Path to zsh history file";
     };
   };
 }

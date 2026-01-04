@@ -100,77 +100,68 @@ nix profile install github:Bullish-Design/nix-terminal
 
 ## Configuration
 
-The module provides extensive customization options:
-
-### Basic Configuration
+All aspects are configurable:
 
 ```nix
 programs.nix-terminal = {
   enable = true;
 
+  # Custom packages
+  corePackages = with pkgs; [ tree jq ripgrep ];
+  extraPackages = with pkgs; [ nodejs python3 ];
+
+  # Git settings
+  enableGit = true;
+  gitDefaultBranch = "main";
+  gitPullRebase = true;
+
   # Zsh configuration
   zsh = {
     enable = true;
-    theme = "starship";  # or "powerlevel10k", "minimal"
-    enableAutosuggestions = true;
-    enableSyntaxHighlighting = true;
-    enableCompletion = true;
-
-    # Add custom aliases
+    theme = "starship";
     aliases = {
+      ll = "ls -lah";
       vim = "nvim";
-      k = "kubectl";
-      tf = "terraform";
     };
-
-    # Add extra configuration
-    extraConfig = ''
-      # Your custom zsh config here
-      export EDITOR=nvim
-    '';
+    historySize = 50000;
   };
 
-  # Atuin configuration
+  # Atuin
   atuin = {
     enable = true;
-    searchMode = "fuzzy";  # or "prefix", "fulltext", "skim"
-    style = "auto";        # or "full", "compact"
-    autoSync = false;      # Enable to sync across machines
-    syncAddress = "https://api.atuin.sh";
+    searchMode = "fuzzy";
   };
 
-  # Add extra packages
-  extraPackages = with pkgs; [
-    nodejs
-    python3
-    docker-compose
-  ];
+  # Starship customization
+  starshipSettings = {
+    # Your custom starship config
+  };
 };
 ```
 
-### Default Aliases
+### Breaking Change: Aliases Are No Longer Default
 
-The following aliases are configured by default:
+Aliases must now be explicitly configured. Use this snippet as a starting point:
 
-```bash
-# Directory navigation
-ll    # ls -lah (with eza: detailed list with icons)
-la    # ls -A  (all files)
-l     # ls -CF (columnar format)
-..    # cd ..
-...   # cd ../..
+```nix
+programs.nix-terminal.zsh.aliases = {
+  # Navigation
+  ll = "ls -lah";
+  la = "ls -A";
+  l = "ls -CF";
+  ".." = "cd ..";
+  "..." = "cd ../..";
 
-# Git shortcuts
-gst   # git status
-gd    # git diff
-gc    # git commit
-gp    # git push
-gl    # git log --oneline --graph --decorate
+  # Git
+  gst = "git status";
+  gd = "git diff";
+  gc = "git commit";
+  gp = "git push";
+  gl = "git log --oneline --graph --decorate";
 
-# Utilities
-grep  # grep --color=auto
-cat   # bat --style=auto (when bat is available)
-ls    # eza --icons (when eza is available)
+  # Tools
+  grep = "grep --color=auto";
+};
 ```
 
 ### Theme Options
