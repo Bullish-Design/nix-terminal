@@ -69,6 +69,13 @@ in
           alias cat='bat --style=auto'
         fi
 
+        # Guide aliases
+        alias nimr='nix run'
+        alias copier-new='copier copy'
+        alias copier-update='copier update'
+        alias uv-venv='uv venv'
+        alias devboot='nix develop'
+
         ${cfg.extraConfig}
       '';
     };
