@@ -79,6 +79,29 @@ in
       settings = config.programs.nix-terminal.starshipSettings;
     };
 
+    # Deploy custom theme if specified
+    home.file.".oh-my-zsh/custom/themes/devprompt.zsh-theme" = lib.mkIf (cfg.theme == "devprompt") {
+      text = ''
+        # devprompt.zsh-theme
+        local current_dir='%{$fg[cyan]%}%3~%{$reset_color%}'
+
+        ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}‹"
+        ZSH_THEME_GIT_PROMPT_SUFFIX="› %{$reset_color%}"
+        ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}●%{$fg[yellow]%}"
+        ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[yellow]%}"
+
+        ZSH_THEME_VIRTUAL_ENV_PROMPT_PREFIX="%{$fg[green]%}‹"
+        ZSH_THEME_VIRTUAL_ENV_PROMPT_SUFFIX="› %{$reset_color%}"
+        ZSH_THEME_VIRTUALENV_PREFIX="$ZSH_THEME_VIRTUAL_ENV_PROMPT_PREFIX"
+        ZSH_THEME_VIRTUALENV_SUFFIX="$ZSH_THEME_VIRTUAL_ENV_PROMPT_SUFFIX"
+
+        PROMPT='╭─''${current_dir} $(git_prompt_info)$(virtualenv_prompt_info)
+        ╰─%B➜%b '
+
+        RPROMPT='%(?..%{$fg[red]%}✘ %?%{$reset_color%})'
+      '';
+    };
+
     # FZF configuration for better fuzzy finding
     programs.fzf = {
       enable = true;
