@@ -31,6 +31,9 @@
       nixbuild = import ./modules/nixbuild.nix { 
         inherit nixbuild; 
       };
+      tmux = import ./modules/tmux;
+      development = import ./modules/development;
+      scripts = import ./modules/scripts;
     };
   };
 }
