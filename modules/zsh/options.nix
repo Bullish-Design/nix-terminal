@@ -11,7 +11,7 @@ with lib;
     };
 
     theme = mkOption {
-      type = types.enum [ "powerlevel10k" "starship" "minimal" ];
+      type = types.enum [ "powerlevel10k" "starship" "minimal" "devprompt" ];
       default = "starship";
       description = "Theme to use for zsh prompt";
     };
