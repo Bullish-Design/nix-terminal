@@ -4,7 +4,14 @@
 
 let
   cfg = config.programs.repoman;
-  repomanPkg = repoman.packages.${pkgs.system}.default;
+  
+  # Override repoman package to fix missing build dependencies
+  repomanPkg = repoman.packages.${pkgs.system}.default.overrideAttrs (oldAttrs: {
+    nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [
+      pkgs.python312Packages.setuptools
+      pkgs.python312Packages.wheel
+    ];
+  });
   
   configFormat = if cfg.configFormat == "yaml" then "yaml" else "toml";
   configFile = if cfg.configFormat == "yaml" then "repoman.yaml" else "repoman.toml";
