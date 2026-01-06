@@ -18,9 +18,14 @@
       url = "github:Bullish-Design/devman/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    repoman = {
+      url = "github:Bullish-Design/repoman";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixvim, devman, nixbuild, ... }: {
+  outputs = { self, nixvim, devman, nixbuild, repoman, ... }: {
     # homeManagerModules.terminal = import ./modules/terminal.nix {
     #   inherit nixvim devman nixbuild;
     # };
@@ -28,11 +33,17 @@
       terminal = import ./modules/terminal.nix {
         inherit nixvim devman;
       };
+      
       nixbuild = import ./modules/nixbuild.nix { 
         inherit nixbuild; 
       };
+
+      repoman = import ./modules/repoman.nix { inherit repoman; };
+      
       tmux = import ./modules/tmux;
+      
       development = import ./modules/development;
+      
       scripts = import ./modules/scripts;
     };
   };
