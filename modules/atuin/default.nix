@@ -1,8 +1,7 @@
-{ ... }:
-
+{ atuin }:
 {
   imports = [
-    ./options.nix
+    (import ./options.nix { inherit atuin; })
     ./config.nix
   ];
 }

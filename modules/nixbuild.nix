@@ -3,11 +3,11 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.programs.nixbuild;
+  cfg = config.nix-terminal.nixbuild;
   nixbuildPkg = nixbuild.packages.${pkgs.system}.default;
 in
 {
-  options.programs.nixbuild = {
+  options.nix-terminal.nixbuild = {
     enable = lib.mkEnableOption "nixos-rebuild-tester";
 
     outputDir = lib.mkOption {

@@ -2,128 +2,79 @@
 
 ## Repository Overview
 
-**nix-terminal** provides modular Home Manager modules for terminal environment configuration. It's the foundation of a terminal-centric NixOS workflow, integrating zsh, atuin, tmux, and neovim.
+**nix-terminal** is the ambient terminal Home-Manager environment for the tower
+dotfiles stack: shell (zsh), multiplexer (zellij), git/delta, kitty, atuin,
+packaged scripts, ambient dev CLIs, and the HM-side wiring for nixbuild + repoman
+(incl. the `fleet` seam). It **consumes nix-nvim** as the editor (replacing the
+retired `nixvim`) and is the sole content of nix-meta's `terminal` tier.
 
 ## Architecture
 
 ```
-flake.nix
-    ├── homeManagerModules.terminal  → modules/terminal.nix
-    ├── homeManagerModules.nixbuild  → modules/nixbuild.nix
-    ├── homeManagerModules.tmux      → modules/tmux/
-    ├── homeManagerModules.development → modules/development/
-    └── homeManagerModules.scripts   → modules/scripts/
+flake.nix  (inputs: nixpkgs · home-manager · nixpkgs-zellij 265473c9 · atuin
+            v18.16.0 · nix-nvim · nixbuild · repoman · devman)
+    homeManagerModules = {
+      terminal     → modules/terminal.nix   (umbrella; imports nix-nvim, sets `nv`)
+      shell        → modules/shell/         (zsh + oh-my-zsh devprompt + hooks)
+      zellij       → modules/zellij/        (KDL set + znv; graphical bits gated)
+      git          → modules/git/           (git + delta, identity = andrew)
+      kitty        → modules/kitty/         (full kitty OR terminfoOnly headless)
+      atuin        → modules/atuin/         (pinned v18.16.0 + daemon)
+      scripts      → modules/scripts/       (scripts/shell/*.sh)
+      development  → modules/development/   (ambient: gh + direnv only)
+      nixbuild     → modules/nixbuild.nix
+      repoman      → modules/repoman.nix    (+ the fleet seam)
+      default      → aggregate (imports every sibling)
+    }
 ```
 
-### Module Structure
+### Namespace
 
-Each module follows a pattern:
-- `default.nix` - Imports options and config
-- `options.nix` - Declares module options under `programs.nix-terminal.*`
-- `config.nix` - Implements configuration when enabled
+Repo-root convention **`nix-terminal.<module>.*`** (e.g. `nix-terminal.zellij.enable`)
+— NOT `programs.nix-terminal.*` (the old scaffold convention, now removed). Each
+module gates on its **own** `cfg.enable` (decoupled from the umbrella — nix-meta
+enables them individually via the tier). Modules: `options.nix` declares,
+`config.nix` implements behind `mkIf cfg.enable` (single-file modules inline both).
 
-### Key Dependencies
+### Pins owned here (do NOT re-pin in nix-meta; only follows-unify)
 
-| Input | Purpose |
-|-------|---------|
-| `nixvim` | Neovim configuration |
-| `devman` | Development environment tools |
-| `nixbuild` | NixOS rebuild testing |
+| Pin | Form |
+|---|---|
+| zellij | `nixpkgs-zellij` 265473c9 (a second nixpkgs node; NOT followed) |
+| atuin | `atuin` v18.16.0 tag (its nixpkgs follows; the tag is the pin) |
+| kitty / kitty.terminfo | rides nixpkgs |
 
-## Making Changes
+`nixpkgs-zellij` is the only sanctioned extra nixpkgs node from this repo.
 
-### Adding a New Module
+## Consumes / consumed by
 
-1. Create `modules/<name>/default.nix` (or single file for simple modules)
-2. Export in `flake.nix` under `homeManagerModules`
-3. Import in `terminal.nix` if it should be part of the main terminal module
-4. Document in README.md
+- **Consumes** `nix-nvim.homeManagerModules.neovim` (path: input in dev). The
+  `terminal` umbrella sets `nix-nvim.neovim.enable` + `command = "nv"`.
+- **Consumed by** nix-meta's terminal tier: imports `{terminal, shell, zellij,
+  git, atuin, scripts, development, nixbuild, repoman}` + `kitty` (`terminfoOnly`
+  on headless). `fleetSync` capability flips `nix-terminal.repoman.fleet.enable`.
+- **nixvim** is fully removed (superseded by nix-nvim).
 
-### Module Option Pattern
+## devenv-lib boundary
 
-```nix
-# options.nix
-options.programs.nix-terminal.<module> = {
-  enable = mkOption {
-    type = types.bool;
-    default = true;
-    description = "Enable <module>";
-  };
-  # Additional options...
-};
+Ambient stays here (zsh/zellij/atuin/git/gh/direnv-hook/scripts/nixbuild/repoman).
+**`uv`/`go` + project toolchains moved OUT** of `development` to devenv-lib —
+`development` is now `gh` + direnv only.
 
-# config.nix
-config = mkIf (config.programs.nix-terminal.enable && cfg.enable) {
-  # Configuration here
-};
-```
+## The repoman fleet seam
 
-### Adding Shell Scripts
+`nix-terminal.repoman.fleet.{enable,manifest,projectsDir}` is HM wiring ONLY
+(materializes `repos.toml`, session vars, `rfleet`/`fleet-sync` aliases, the
+projects dir). The multi-repo clone/fetch + `flake-update` CLI ships in the
+repoman package (the 07-tower-repo-set-sync work); this module does not implement
+fleet logic. Independent of the base `repoman.enable` (a separate mkIf block).
 
-1. Create script in `scripts/shell/<name>.sh`
-2. Scripts are automatically packaged via `modules/scripts/default.nix`
-3. Installed as `<name>` (without .sh extension)
+## Status
 
-Script template:
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-# Implementation
-```
-
-## Constraints
-
-- **Home Manager modules only**: No NixOS modules here (use nixos-core)
-- **Options under `programs.nix-terminal`**: Maintain namespace consistency
-- **No default aliases**: Users must explicitly configure aliases
-- **Conditional configuration**: Always guard with `mkIf cfg.enable`
-
-## Testing Changes
-
-```bash
-nix flake check
-
-# Test in a consumer flake
-nix build .#homeConfigurations.test --dry-run
-```
-
-## Integration Points
-
-### Consumed by nix-meta
-
-```nix
-imports = [
-  nix-terminal.homeManagerModules.terminal
-  nix-terminal.homeManagerModules.nixbuild
-];
-```
-
-### Consumes from nixbuild
-
-The `nixbuild.nix` module wraps the nixbuild package with Home Manager options.
-
-## Common Tasks
-
-### Add zsh alias support for new tool
-Update `modules/zsh/config.nix` in the `initExtra` section.
-
-### Add new atuin option
-1. Add option in `modules/atuin/options.nix`
-2. Use in `modules/atuin/config.nix` under `programs.atuin.settings`
-
-### Add tmux plugin
-Update `modules/tmux/default.nix` plugins list with the new plugin from `pkgs.tmuxPlugins`.
-
-### Modify starship prompt
-Default settings are in `modules/terminal.nix` under `starshipSettings`. Users can override via `programs.nix-terminal.starshipSettings`.
-
-## File Locations
-
-| What | Where |
-|------|-------|
-| Main terminal module | `modules/terminal.nix` |
-| Zsh config | `modules/zsh/` |
-| Atuin config | `modules/atuin/` |
-| Tmux config | `modules/tmux/default.nix` |
-| Shell scripts | `scripts/shell/*.sh` |
-| nixbuild integration | `modules/nixbuild.nix` |
+Built + validated (Wave 2): `nix flake check` green; modules resolve in an HM
+eval; the composed activation builds (shell/zellij/git/kitty/atuin/scripts/
+development + nv via nix-nvim + the fleet seam); nixvim gone; atuin pinned to
+18.16.0; git identity de-hardcoded to andrew. NOTE: the `nixbuild` and base
+`repoman` *packages* currently fail to build against current nixpkgs (upstream
+flake/packaging drift — `devenv.lib.mkFlake` removed; repoman's `jinja2` runtime
+dep undeclared); their nix-terminal *modules* are correctly wired and resolve.

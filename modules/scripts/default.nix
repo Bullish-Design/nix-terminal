@@ -1,3 +1,4 @@
+# nix-terminal.scripts — the packaged shell scripts (scripts/shell/*.sh).
 { config, lib, pkgs, ... }:
 
 let
@@ -20,9 +21,13 @@ let
     '';
   };
 
-  cfg = config.programs.nix-terminal;
+  cfg = config.nix-terminal.scripts;
 in
 {
+  options.nix-terminal.scripts = {
+    enable = lib.mkEnableOption "the packaged shell scripts";
+  };
+
   config = lib.mkIf cfg.enable {
     home.packages = [ scriptsPackage ];
   };

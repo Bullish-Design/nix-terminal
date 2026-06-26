@@ -3,8 +3,8 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.programs.repoman;
-  
+  cfg = config.nix-terminal.repoman;
+
   # Override repoman package to fix missing build dependencies
   repomanPkg = repoman.packages.${pkgs.system}.default.overrideAttrs (oldAttrs: {
     nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [
@@ -12,12 +12,12 @@ let
       pkgs.python312Packages.wheel
     ];
   });
-  
+
   configFormat = if cfg.configFormat == "yaml" then "yaml" else "toml";
   configFile = if cfg.configFormat == "yaml" then "repoman.yaml" else "repoman.toml";
 in
 {
-  options.programs.repoman = {
+  options.nix-terminal.repoman = {
     enable = lib.mkEnableOption "repoman repository manager";
 
     configFormat = lib.mkOption {
@@ -98,9 +98,34 @@ in
       default = true;
       description = "Enable convenient shell aliases for repoman";
     };
+
+    # ── the fleet half (nix-meta's `fleetSync` capability flips this) ──────
+    # HM seam ONLY — the multi-repo clone/fetch + flake-update CLI ships in the
+    # repoman package (the 07-tower-repo-set-sync work). This wires it: presence
+    # + toggle + aliases. nix-terminal-PLAN §3.10 / nix-meta-PLAN §5.
+    fleet = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enable the repoman fleet half (multi-repo clone/fetch driver). nix-meta's fleetSync sets this true.";
+      };
+
+      manifest = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = "Path to repos.toml (the fleet manifest; canonical copy lives in nix-meta). Null → repoman's --manifest default.";
+      };
+
+      projectsDir = lib.mkOption {
+        type = lib.types.str;
+        default = "${config.home.homeDirectory}/Documents/Projects";
+        description = "Where fleet sync clones/fetches (both machines → ~/Documents/Projects).";
+      };
+    };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
     home.packages = [ repomanPkg ];
 
     xdg.configFile."repoman/${configFile}".text = 
@@ -157,6 +182,34 @@ in
     home.activation.repomanSetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
       $DRY_RUN_CMD mkdir -p "${cfg.baseDir}"
     '';
-  };
+    })
+
+    # The fleet half — independent of the umbrella `repoman.enable`.
+    (lib.mkIf cfg.fleet.enable {
+      # Ensure the fleet manifest is present (linked from the canonical copy if set).
+      xdg.configFile."repoman/repos.toml" = lib.mkIf (cfg.fleet.manifest != null) {
+        source = cfg.fleet.manifest;
+      };
+
+      home.sessionVariables = {
+        REPOMAN_FLEET_PROJECTS_DIR = cfg.fleet.projectsDir;
+      } // lib.optionalAttrs (cfg.fleet.manifest != null) {
+        REPOMAN_FLEET_MANIFEST = "${config.xdg.configHome}/repoman/repos.toml";
+      };
+
+      home.activation.repomanFleetSetup = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        $DRY_RUN_CMD mkdir -p "${cfg.fleet.projectsDir}"
+      '';
+
+      programs.zsh.shellAliases = lib.mkIf config.programs.zsh.enable {
+        rfleet = "repoman fleet";
+        fleet-sync = "repoman fleet sync";
+      };
+      programs.bash.shellAliases = lib.mkIf config.programs.bash.enable {
+        rfleet = "repoman fleet";
+        fleet-sync = "repoman fleet sync";
+      };
+    })
+  ];
 }
 
