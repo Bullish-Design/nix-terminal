@@ -5,13 +5,9 @@
 let
   cfg = config.nix-terminal.repoman;
 
-  # Override repoman package to fix missing build dependencies
-  repomanPkg = repoman.packages.${pkgs.system}.default.overrideAttrs (oldAttrs: {
-    nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [
-      pkgs.python312Packages.setuptools
-      pkgs.python312Packages.wheel
-    ];
-  });
+  # The repoman package builds clean upstream (jinja2 runtime dep + setuptools/wheel
+  # build-system are declared in its flake as of 0843ae4) — no override needed.
+  repomanPkg = repoman.packages.${pkgs.system}.default;
 
   configFormat = if cfg.configFormat == "yaml" then "yaml" else "toml";
   configFile = if cfg.configFormat == "yaml" then "repoman.yaml" else "repoman.toml";
