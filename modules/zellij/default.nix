@@ -1,5 +1,5 @@
 # nix-terminal.zellij — the multiplexer, ported from .dotfiles/zellij.
-# Curried with the nixpkgs-zellij pin (265473c9). Graphical launchers/desktop
+# Curried with the nixpkgs-zellij pin (d4079514, zellij 0.44.3). Graphical launchers/desktop
 # entry are gated off on the headless tower.
 { nixpkgs-zellij }:
 { config, lib, pkgs, ... }:
@@ -18,7 +18,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs-zellij.zellij;
-      defaultText = literalExpression "nixpkgs-zellij (265473c9).zellij";
+      defaultText = literalExpression "nixpkgs-zellij (d4079514).zellij";
       description = "The zellij to install (defaulted from the pin).";
     };
 

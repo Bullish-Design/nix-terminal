@@ -10,7 +10,7 @@
     };
 
     # ── pins OWNED here (nix-terminal-PLAN §5) — deliberately NOT following nixpkgs ──
-    nixpkgs-zellij.url = "github:NixOS/nixpkgs/265473c9181f3b18295d634c844bdf7761a18594";
+    nixpkgs-zellij.url = "github:NixOS/nixpkgs/d407951447dcd00442e97087bf374aad70c04cea";
     atuin = {
       url = "github:atuinsh/atuin/v18.16.0"; # the v18.16.0 tag IS the pin
       inputs.nixpkgs.follows = "nixpkgs";

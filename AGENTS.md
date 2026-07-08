@@ -11,7 +11,7 @@ retired `nixvim`) and is the sole content of nix-meta's `terminal` tier.
 ## Architecture
 
 ```
-flake.nix  (inputs: nixpkgs · home-manager · nixpkgs-zellij 265473c9 · atuin
+flake.nix  (inputs: nixpkgs · home-manager · nixpkgs-zellij d4079514 · atuin
             v18.16.0 · nix-nvim · nixbuild · repoman · devman)
     homeManagerModules = {
       terminal     → modules/terminal.nix   (umbrella; imports nix-nvim, sets `nv`)
@@ -40,7 +40,7 @@ enables them individually via the tier). Modules: `options.nix` declares,
 
 | Pin | Form |
 |---|---|
-| zellij | `nixpkgs-zellij` 265473c9 (a second nixpkgs node; NOT followed) |
+| zellij | `nixpkgs-zellij` d4079514 (a second nixpkgs node; NOT followed) |
 | atuin | `atuin` v18.16.0 tag (its nixpkgs follows; the tag is the pin) |
 | kitty / kitty.terminfo | rides nixpkgs |
 
