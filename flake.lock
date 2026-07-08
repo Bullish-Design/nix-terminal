@@ -640,7 +640,8 @@
         "nixbuild": "nixbuild",
         "nixpkgs": "nixpkgs",
         "nixpkgs-zellij": "nixpkgs-zellij",
-        "repoman": "repoman"
+        "repoman": "repoman",
+        "zelligate": "zelligate"
       }
     },
     "rust-analyzer-src": {
@@ -748,6 +749,23 @@
         "owner": "numtide",
         "repo": "treefmt-nix",
         "type": "github"
+      }
+    },
+    "zelligate": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783528638,
+        "narHash": "sha256-wAfZ9M5daooHnLVZMV8uusStatFcMrVgRnB84+JaZUA=",
+        "path": "/home/andrew/Documents/Projects/zelligate",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/andrew/Documents/Projects/zelligate",
+        "type": "path"
       }
     }
   },

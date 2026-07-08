@@ -31,6 +31,14 @@
     repoman = { url = "github:Bullish-Design/repoman"; inputs.nixpkgs.follows = "nixpkgs"; };
     devman = { url = "github:Bullish-Design/devman/main"; inputs.nixpkgs.follows = "nixpkgs"; };
 
+    # Access layer: the zelligate Zellij web workbench. Absolute path in dev
+    # (relative path: fails pure eval); github:…?ref=<tag> at publish via the
+    # repoman fleet flake-update.
+    zelligate = {
+      url = "path:/home/andrew/Documents/Projects/zelligate";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # nixvim — DELETED entirely (superseded by nix-nvim).
   };
 
@@ -50,6 +58,7 @@
         development = import ./modules/development;
         nixbuild = import ./modules/nixbuild.nix { inherit (inputs) nixbuild; };
         repoman = import ./modules/repoman.nix { inherit (inputs) repoman; };
+        zelligate = import ./modules/zelligate.nix { inherit (inputs) zelligate nixpkgs-zellij; };
       };
     in
     {
