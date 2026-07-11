@@ -1,4 +1,4 @@
-{ nixvim, devman }:
+{ nix-nvim, devman }:
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -11,7 +11,7 @@ in
     ./zsh
     ./atuin
     ./scripts
-    nixvim.homeManagerModules.default
+    nix-nvim.homeManagerModules.neovim
   ];
 
   options.programs.nix-terminal = {
@@ -132,5 +132,13 @@ in
     home.packages = cfg.corePackages
       ++ [ devman.packages.${pkgs.system}.devman-tools ]
       ++ cfg.extraPackages;
+
+    # Neovim: the loci-rich config packaged by nix-nvim (supersedes the old
+    # nixvim input). Its `enable` defaults off, so activate it with the terminal
+    # module; `nv` is the fleet-standard launcher bin name.
+    nix-nvim.neovim = {
+      enable = true;
+      command = "nv";
+    };
   };
 }

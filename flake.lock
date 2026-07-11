@@ -271,17 +271,85 @@
         "type": "github"
       }
     },
-    "mini-nvim-src": {
-      "flake": false,
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nix-nvim",
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1766071746,
-        "narHash": "sha256-xmNZrQDptaNcECHSGtjownFyR1qxsP7lge8OAIFe8BU=",
-        "type": "tarball",
-        "url": "https://github.com/nvim-mini/mini.nvim/archive/refs/tags/v0.17.0.tar.gz"
+        "lastModified": 1782423922,
+        "narHash": "sha256-qPNd6lUohHP5gcJhqQ7rLV87RwIx0xYR2A4Frb9Zjc4=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "5d320ab301cfaaca7d32514f13815d19d109f5f4",
+        "type": "github"
       },
       "original": {
-        "type": "tarball",
-        "url": "https://github.com/nvim-mini/mini.nvim/archive/refs/tags/v0.17.0.tar.gz"
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "knappy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781897130,
+        "narHash": "sha256-qOPWqownJE+rL08pfILXNo7cYok6uXA0/AjVi10NUOs=",
+        "path": "/home/andrew/Documents/Projects/knappy",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/andrew/Documents/Projects/knappy",
+        "type": "path"
+      }
+    },
+    "loci-core": {
+      "inputs": {
+        "knappy": "knappy",
+        "nixpkgs": [
+          "nix-nvim",
+          "loci-nvim",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783651035,
+        "narHash": "sha256-r0ZrP01k2of7bVfKzrBdhCP2tC/jrpnUfVvVVCbB84Q=",
+        "owner": "Bullish-Design",
+        "repo": "loci-core",
+        "rev": "02be76df0997d60a21011b4b92836c1f19d38b97",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Bullish-Design",
+        "ref": "02be76d",
+        "repo": "loci-core",
+        "type": "github"
+      }
+    },
+    "loci-nvim": {
+      "inputs": {
+        "loci-core": "loci-core",
+        "nixpkgs": [
+          "nix-nvim",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783717228,
+        "narHash": "sha256-Om5HZD6HxUNEsKrUMryOPRClBQR7VB5+aH+V/tGagmY=",
+        "owner": "Bullish-Design",
+        "repo": "loci.nvim",
+        "rev": "262bbc23bf3a9c664785f554a860bfb65f5f953c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Bullish-Design",
+        "ref": "v0.1.1",
+        "repo": "loci.nvim",
+        "type": "github"
       }
     },
     "nix": {
@@ -327,6 +395,29 @@
         "owner": "cachix",
         "ref": "devenv-2.34",
         "repo": "nix",
+        "type": "github"
+      }
+    },
+    "nix-nvim": {
+      "inputs": {
+        "home-manager": "home-manager",
+        "loci-nvim": "loci-nvim",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-neovim": "nixpkgs-neovim"
+      },
+      "locked": {
+        "lastModified": 1783720102,
+        "narHash": "sha256-Td+SH8iUCpu5xyiAF6jWwblHjSvju9mR2mDZAOcdtdg=",
+        "owner": "Bullish-Design",
+        "repo": "nix-nvim",
+        "rev": "72f977fe64a9ba507fafe2d0c3756a7a921e6f70",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Bullish-Design",
+        "repo": "nix-nvim",
         "type": "github"
       }
     },
@@ -394,25 +485,19 @@
         "type": "github"
       }
     },
-    "nixvim": {
-      "inputs": {
-        "mini-nvim-src": "mini-nvim-src",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
+    "nixpkgs-neovim": {
       "locked": {
-        "lastModified": 1772401071,
-        "narHash": "sha256-LZwLgOzD9rHtbyI2kZ+FX54Hv8P7168HpJHiefLCypg=",
-        "owner": "Bullish-Design",
-        "repo": "nixvim",
-        "rev": "ecae632958b76513d21efcda48387ddc502a7e1b",
+        "lastModified": 1778869304,
+        "narHash": "sha256-30sZNZoA1cqF5JNO9fVX+wgiQYjB7HJqqJ4ztCDeBZE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d233902339c02a9c334e7e593de68855ad26c4cb",
         "type": "github"
       },
       "original": {
-        "owner": "Bullish-Design",
-        "ref": "main",
-        "repo": "nixvim",
+        "owner": "NixOS",
+        "ref": "d2339023",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
@@ -439,9 +524,9 @@
     "root": {
       "inputs": {
         "devman": "devman",
+        "nix-nvim": "nix-nvim",
         "nixbuild": "nixbuild",
         "nixpkgs": "nixpkgs",
-        "nixvim": "nixvim",
         "repoman": "repoman",
         "zelligate": "zelligate"
       }

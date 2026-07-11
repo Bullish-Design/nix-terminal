@@ -9,8 +9,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixvim = {
-      url = "github:Bullish-Design/nixvim/main";
+    # nix-nvim packages the loci-rich Neovim config promoted from ~/.dotfiles/nvim.
+    # It supersedes the old Bullish-Design/nixvim input (retired). follows keeps
+    # the single-nixpkgs hygiene nix-nvim advertises (its neovim 0.12 pin is the
+    # only sanctioned extra node, held internally).
+    nix-nvim = {
+      url = "github:Bullish-Design/nix-nvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -31,13 +35,10 @@
     };
   };
 
-  outputs = { self, nixvim, devman, nixbuild, repoman, zelligate, ... }: {
-    # homeManagerModules.terminal = import ./modules/terminal.nix {
-    #   inherit nixvim devman nixbuild;
-    # };
+  outputs = { self, nix-nvim, devman, nixbuild, repoman, zelligate, ... }: {
     homeManagerModules = {
       terminal = import ./modules/terminal.nix {
-        inherit nixvim devman;
+        inherit nix-nvim devman;
       };
       
       nixbuild = import ./modules/nixbuild.nix { 
