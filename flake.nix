@@ -23,9 +23,15 @@
       url = "github:Bullish-Design/repoman";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    zelligate = {
+      # Private fleet repo — SSH form (same convention as nix-secrets in nix-meta).
+      url = "git+ssh://git@github.com/Bullish-Design/zelligate.git?ref=main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixvim, devman, nixbuild, repoman, ... }: {
+  outputs = { self, nixvim, devman, nixbuild, repoman, zelligate, ... }: {
     # homeManagerModules.terminal = import ./modules/terminal.nix {
     #   inherit nixvim devman nixbuild;
     # };
@@ -39,7 +45,9 @@
       };
 
       repoman = import ./modules/repoman.nix { inherit repoman; };
-      
+
+      zelligate = import ./modules/zelligate.nix { inherit zelligate; };
+
       tmux = import ./modules/tmux;
       
       development = import ./modules/development;
