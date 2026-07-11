@@ -7,6 +7,11 @@ let
 in
 {
   config = mkIf (cfg.enable && cfg.atuin.enable) {
+    # Atuin owns Ctrl-R for history search. fzf (enabled in the zsh module) binds
+    # Ctrl-R too by default; cede it so there's no double-binding — and no HM
+    # "both configure Ctrl-R" warning. fzf keeps Ctrl-T (files) and Alt-C (cd).
+    programs.fzf.historyWidget.command = mkIf cfg.zsh.enable "";
+
     # Atuin configuration
     programs.atuin = {
       enable = true;
