@@ -412,11 +412,11 @@
         "nixpkgs-neovim": "nixpkgs-neovim"
       },
       "locked": {
-        "lastModified": 1783957598,
-        "narHash": "sha256-cg7Jwmv4OpVQ0TYF9gMItaVj8+VrxCnL13HmyLzQ6b0=",
+        "lastModified": 1783974074,
+        "narHash": "sha256-1MJnUaGIrdQZDpx/RZGWmeladAqqHimpHyYGOm0Rmmc=",
         "owner": "Bullish-Design",
         "repo": "nix-nvim",
-        "rev": "03f79a2d6d36ea1c6e4f97dec6b1df22d52ab02d",
+        "rev": "249acc1f41b62c2b30f246f97f542b38b3e8094d",
         "type": "github"
       },
       "original": {
