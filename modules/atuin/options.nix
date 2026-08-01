@@ -33,5 +33,16 @@ with lib;
       default = "auto";
       description = "Interface style";
     };
+
+    agentHooks = mkOption {
+      type = types.listOf (types.enum [ "claude-code" "codex" "pi" ]);
+      default = [ "claude-code" "codex" "pi" ];
+      description = ''
+        AI coding agents whose Bash tool invocations Atuin captures as
+        history entries (author-tagged). Runs `atuin hook install` for each
+        agent at Home Manager activation — idempotent, and merges into
+        existing agent configs rather than clobbering them.
+      '';
+    };
   };
 }

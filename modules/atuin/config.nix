@@ -30,5 +30,16 @@ in
         ctrl_n_shortcuts = true;
       };
     };
+
+    # Install AI agent hooks (claude-code, codex, pi) so commands run by
+    # coding agents appear in Atuin history, author-tagged. Use atuin's own
+    # installer: it merges into the user's existing agent configs (Claude
+    # settings, Codex hooks) and writes the pi extension from source embedded
+    # in the binary — neither is expressible as static `home.files`.
+    home.activation.atuinAgentHooks = lib.hm.dag.entryAfter [ "writeBoundary" ] (
+      concatMapStringsSep "\n" (agent: ''
+        $DRY_RUN_CMD ${config.programs.atuin.package}/bin/atuin hook install ${agent}
+      '') cfg.atuin.agentHooks
+    );
   };
 }
