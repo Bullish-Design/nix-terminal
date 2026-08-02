@@ -28,14 +28,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    zelligate = {
-      # Private fleet repo — SSH form (same convention as nix-secrets in nix-meta).
-      url = "git+ssh://git@github.com/Bullish-Design/zelligate.git?ref=main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # DISABLED 2026-08-01: zelligate input commented out (workspace daemon not
+    # in use; nix-meta disabled it the same day). Restore together with the
+    # output export + modules/zelligate.nix when Phase C returns.
+    # zelligate = {
+    #   # Private fleet repo — SSH form (same convention as nix-secrets in nix-meta).
+    #   url = "git+ssh://git@github.com/Bullish-Design/zelligate.git?ref=main";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
   };
 
-  outputs = { self, nix-nvim, devman, nixbuild, repoman, zelligate, ... }: {
+  outputs = { self, nix-nvim, devman, nixbuild, repoman, ... }: {
     homeManagerModules = {
       terminal = import ./modules/terminal.nix {
         inherit nix-nvim devman;
@@ -47,7 +50,8 @@
 
       repoman = import ./modules/repoman.nix { inherit repoman; };
 
-      zelligate = import ./modules/zelligate.nix { inherit zelligate; };
+      # DISABLED 2026-08-01 with the input above (see flake.nix zelligate note).
+      # zelligate = import ./modules/zelligate.nix { inherit zelligate; };
 
       tmux = import ./modules/tmux;
       
