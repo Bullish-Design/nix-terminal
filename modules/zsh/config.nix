@@ -120,8 +120,8 @@ in
         "--border"
         "--inline-info"
       ];
-      changeDirWidgetCommand = "fd --type d --hidden --follow --exclude .git";
-      fileWidgetCommand = "fd --type f --hidden --follow --exclude .git";
+      changeDirWidget.command = "fd --type d --hidden --follow --exclude .git";
+      fileWidget.command = "fd --type f --hidden --follow --exclude .git";
     };
 
     # Direnv for automatic environment loading
