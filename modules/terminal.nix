@@ -130,7 +130,7 @@ in
 
     # Core terminal packages
     home.packages = cfg.corePackages
-      ++ [ devman.packages.${pkgs.system}.devman-tools ]
+      ++ [ devman.packages.${pkgs.stdenv.hostPlatform.system}.devman-tools ]
       ++ cfg.extraPackages;
 
     # Neovim: the loci-rich config packaged by nix-nvim (supersedes the old

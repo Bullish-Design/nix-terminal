@@ -4,7 +4,7 @@
 
 let
   cfg = config.programs.nixbuild;
-  nixbuildPkg = nixbuild.packages.${pkgs.system}.default;
+  nixbuildPkg = nixbuild.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
   options.programs.nixbuild = {

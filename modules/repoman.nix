@@ -6,7 +6,7 @@ let
   cfg = config.programs.repoman;
   
   # Override repoman package to fix missing build dependencies
-  repomanPkg = repoman.packages.${pkgs.system}.default.overrideAttrs (oldAttrs: {
+  repomanPkg = repoman.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (oldAttrs: {
     nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [
       pkgs.python312Packages.setuptools
       pkgs.python312Packages.wheel

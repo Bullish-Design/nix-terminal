@@ -24,7 +24,7 @@
 
   config = {
     services.zelligate.package =
-      lib.mkDefault zelligate.packages.${pkgs.system}.default;
+      lib.mkDefault zelligate.packages.${pkgs.stdenv.hostPlatform.system}.default;
     services.zelligate.zellijPackage = lib.mkDefault pkgs.zellij;
   };
 }

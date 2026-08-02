@@ -25,7 +25,7 @@ in
         share = true;
       };
 
-      initExtra = ''
+      initContent = ''
         # Better directory navigation
         setopt AUTO_CD
         setopt AUTO_PUSHD
