@@ -40,6 +40,26 @@ in
       description = "Additional packages to install";
     };
 
+    # devman bundles the claude-code and codex-cli CLIs alongside its own
+    # orchestrator (tmuxp + Claude Code + Neovim workspace launcher). Some hosts
+    # install those agents separately (e.g. a dedicated agent profile) — let them
+    # keep the devman orchestrator without shipping duplicate agent binaries.
+    devman = {
+      enable = mkEnableOption "the devman workspace orchestrator (tmuxp + Claude Code + Neovim)";
+
+      withClaudeCode = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Bundle the claude-code CLI into the devman env (sadjow/claude-code-nix)";
+      };
+
+      withCodexCli = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Bundle the codex-cli into the devman env (sadjow/codex-cli-nix)";
+      };
+    };
+
     enableGit = mkOption {
       type = types.bool;
       default = true;
@@ -130,7 +150,13 @@ in
 
     # Core terminal packages
     home.packages = cfg.corePackages
-      ++ [ devman.packages.${pkgs.stdenv.hostPlatform.system}.devman-tools ]
+      ++ lib.optional cfg.devman.enable (
+        devman.lib.mkDevmanEnv {
+          system = pkgs.stdenv.hostPlatform.system;
+          withClaudeCode = cfg.devman.withClaudeCode;
+          withCodexCli = cfg.devman.withCodexCli;
+        }
+      )
       ++ cfg.extraPackages;
 
     # Neovim: the loci-rich config packaged by nix-nvim (supersedes the old
