@@ -44,8 +44,14 @@ in
     # orchestrator (tmuxp + Claude Code + Neovim workspace launcher). Some hosts
     # install those agents separately (e.g. a dedicated agent profile) — let them
     # keep the devman orchestrator without shipping duplicate agent binaries.
+    # `enable` defaults true (matching the pre-option behavior of always
+    # installing devman-tools).
     devman = {
-      enable = mkEnableOption "the devman workspace orchestrator (tmuxp + Claude Code + Neovim)";
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable the devman workspace orchestrator (tmuxp + Claude Code + Neovim)";
+      };
 
       withClaudeCode = mkOption {
         type = types.bool;
