@@ -95,8 +95,20 @@ vim.g.clipboard = "osc52"
 
 Copy is broadly supported. Clipboard reads/paste may be disabled by terminal
 security policy, so ordinary terminal paste remains the reliable fallback.
-When Neovim runs inside tmux, tmux must also be configured to pass clipboard
-updates through (for example, `set -g set-clipboard on`).
+
+Zellij (the fleet multiplexer) forwards OSC 52 WRITES to the client terminal
+(yanks reach the system clipboard), but does NOT answer or forward OSC 52 READS
+(`zellij-server/src/panes/grid.rs`: "TBD: paste from own clipboard - currently
+unsupported"). In-nvim paste (`p`) inside zellij therefore times out after ~10s
+("Waiting for OSC 52 response"); use terminal paste (kitty Ctrl+Shift+V)
+instead.
+
+Kitty's default `clipboard_control` includes `read-clipboard-ask`/
+`read-primary-ask`, so plain-kitty windows pop a confirmation dialog on every
+OSC 52 read (paste, or — previously — yanky's focus-sync sampling). nix-desktop
+ships `programs.nix-desktop.kitty.allowOsc52Read` (default on) to silently
+allow reads; it also installs the noctalia launcher clipboard history, which
+records every OSC 52 write from remote nvim for cross-app recall.
 
 ## Recommendation
 
@@ -105,15 +117,21 @@ updates through (for example, `set -g set-clipboard on`).
    per-host override mechanism.
 2. Add the framework override in the actual framework host configuration so it
    continues to use `~/Documents/Notes` after adopting the shared default.
-3. Replace the unconditional `clipboard=unnamedplus` assignment with provider
-   selection based on the active session:
+3. ~~Replace the unconditional `clipboard=unnamedplus` assignment with provider
+   selection based on the active session~~ **DONE 2026-08-11 (nix-nvim
+   4ae2842)**. `clipboard` now defaults to `auto`: use the local graphical
+   provider when the session has one (Wayland + wl-clipboard, X11 + xclip/xsel,
+   pbcopy, clip.exe), otherwise fall back to the built-in OSC 52 provider. A
+   display gate (`WAYLAND_DISPLAY`/`DISPLAY`) keeps headless SSH sessions on
+   OSC 52 even though the nixpkgs neovim wrapper injects wl-clipboard into
+   PATH.
 
-   - Prefer `wl-copy`/`wl-paste` when both a Wayland session and the provider
-     are available.
-   - Use `vim.g.clipboard = "osc52"` for SSH/TUI sessions with no graphical
-     provider.
-   - Leave `clipboard` unset if neither provider is viable, preventing a
-     warning and preserving normal unnamed-register behavior.
+   The other focus-change annoyance is also fixed: yanky's default-on
+   `system_clipboard.sync_with_ring` sampled the `+` register on every
+   FocusLost/FocusGained, which was the unsolicited read behind kitty's
+   per-focus prompt and zellij's per-focus timeout. Disabled in nix-nvim; the
+   ring keeps all in-nvim yanks, and cross-app recall lives in the client's
+   clipboard history (noctalia/klipper).
 
    The provider must be selected before `clipboard` is used. A delayed
    unconditional `unnamedplus` setting defeats Neovim's OSC 52 auto-detection.
@@ -160,7 +178,9 @@ desktop clipboard.
 1. SSH to the server and launch `nv` in a terminal that permits OSC 52.
 2. Yank a short unique string in Neovim.
 3. Paste with the local terminal/desktop shortcut outside Neovim.
-4. If running through tmux, repeat with tmux clipboard forwarding enabled.
+4. If running through zellij, paste with the terminal shortcut (kitty
+   Ctrl+Shift+V); zellij does not answer OSC 52 reads, so in-nvim `p` times
+   out.
 
 The pasted value must be the remote yank. If the terminal blocks OSC 52 reads,
 verify copy only and use the terminal paste shortcut for inbound clipboard
@@ -169,8 +189,13 @@ content.
 ## Open items
 
 - Locate the framework host's authoritative Nix configuration and add its
-  `obsidian.vaultPath` override there.
-- Implement and test the conditional clipboard-provider policy in `nix-nvim`.
-- Cascade the newly published `nix-nvim` changes through `nix-terminal` and
+  `obsidian.vaultPath` override there (and import nix-desktop, which now ships
+  the kitty `allowOsc52Read` knob, once the desktop host is restored).
+- ~~Implement and test the conditional clipboard-provider policy in
+  `nix-nvim`.~~ DONE 2026-08-11 (4ae2842); validated against the server's nvim
+  binary in SSH, Wayland-desktop, X11, and forced-osc52 modes.
+- ~~Cascade the newly published `nix-nvim` changes through `nix-terminal` and
   the active consumer lock before expecting the server's installed `nv` wrapper
-  to change.
+  to change.~~ DONE: nix-terminal 15bbe46, nix-meta b244b93 (server dry-run
+  build eval verified). Next: `nixos-rebuild switch --flake .#server` on the
+  box to activate the new `nv` wrapper.
