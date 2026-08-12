@@ -301,11 +301,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785972225,
-        "narHash": "sha256-EJKJcqUT7FWTMm3/wDIfrpGl3M5uiDF8PbX9V7Cq4BA=",
+        "lastModified": 1786498621,
+        "narHash": "sha256-xwlTUdSeUGvVV9Wng9sHXnZ6h9niZ/VHZ2t4ITACe10=",
         "ref": "main",
-        "rev": "4a8d5e2251f5c40081c294730f3222d6cdd57163",
-        "revCount": 257,
+        "rev": "81d38baec5d07991e8fa2c5868a43f0435048591",
+        "revCount": 259,
         "type": "git",
         "url": "ssh://git@github.com/Bullish-Design/loci-core.git"
       },
@@ -324,16 +324,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1785974033,
-        "narHash": "sha256-rkAQIWsW9wBd2++vpz35UsOD0tnDSkV9osSxx4kvEvk=",
+        "lastModified": 1786498647,
+        "narHash": "sha256-n0uuQvGUQsNJxyFYRfJYUmUGqiZY/KVdoA20r+ZusgM=",
         "owner": "Bullish-Design",
         "repo": "loci.nvim",
-        "rev": "80ac75a511becbc6427e1e3e14f182bed2b061b0",
+        "rev": "15a1c5b0afa96ae3294bda4986f94064adabba99",
         "type": "github"
       },
       "original": {
         "owner": "Bullish-Design",
-        "ref": "v0.2.0",
+        "ref": "v0.2.1",
         "repo": "loci.nvim",
         "type": "github"
       }
@@ -394,11 +394,11 @@
         "nixpkgs-neovim": "nixpkgs-neovim"
       },
       "locked": {
-        "lastModified": 1786473856,
-        "narHash": "sha256-tdsQtyUUpwtPzXB7r4LaKyepfscUQkx0nHDu5g9CQt4=",
+        "lastModified": 1786498756,
+        "narHash": "sha256-yixfX+cMQM1zN5YSiCArdqhUUU6gQnWzv9tuoP6wFcs=",
         "owner": "Bullish-Design",
         "repo": "nix-nvim",
-        "rev": "4ae2842c35533b3cf705f81c312afe5f938bfa74",
+        "rev": "f9f71cb4808b843f72f298a4c89786d275473f17",
         "type": "github"
       },
       "original": {
