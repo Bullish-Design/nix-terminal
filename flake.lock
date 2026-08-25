@@ -494,17 +494,18 @@
         ]
       },
       "locked": {
-        "lastModified": 1782862307,
-        "narHash": "sha256-YRvOXyqWr5MiXEmTxDNk7MxaoX9y6MqqT3T+dGU4B4k=",
-        "owner": "Bullish-Design",
-        "repo": "repoman",
-        "rev": "787c7512cdbc01bad12317b84f5d532f316eae11",
-        "type": "github"
+        "lastModified": 1787596043,
+        "narHash": "sha256-R8xOVIVUumiCYNbZrvi5qSNLLlvb5WWfXtQJ+gNZN6Y=",
+        "ref": "main",
+        "rev": "5a8dd670baeace4eda1ec02da0f5e12a9ad2440a",
+        "revCount": 128,
+        "type": "git",
+        "url": "file:///home/andrew/Documents/Projects/repoman"
       },
       "original": {
-        "owner": "Bullish-Design",
-        "repo": "repoman",
-        "type": "github"
+        "ref": "main",
+        "type": "git",
+        "url": "file:///home/andrew/Documents/Projects/repoman"
       }
     },
     "root": {

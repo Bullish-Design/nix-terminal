@@ -24,7 +24,10 @@
     };
 
     repoman = {
-      url = "github:Bullish-Design/repoman";
+      # The developer profile supplies Repoman on $PATH. Resolve it from the
+      # local committed checkout so the profile gets the current 0.7.0 release
+      # without GitHub in its build path.
+      url = "git+file:///home/andrew/Documents/Projects/repoman?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
