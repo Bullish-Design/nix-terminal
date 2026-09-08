@@ -494,18 +494,18 @@
         ]
       },
       "locked": {
-        "lastModified": 1787596043,
-        "narHash": "sha256-R8xOVIVUumiCYNbZrvi5qSNLLlvb5WWfXtQJ+gNZN6Y=",
-        "ref": "main",
-        "rev": "5a8dd670baeace4eda1ec02da0f5e12a9ad2440a",
-        "revCount": 128,
+        "lastModified": 1788823452,
+        "narHash": "sha256-G9ke+XOt5uK6gweQca1ARnF+8WCfpiwHA9Zaal3DGYg=",
+        "ref": "refs/tags/v0.7.5",
+        "rev": "cd34bfd4845d6dde310d3a263816c86cad977a9f",
+        "revCount": 154,
         "type": "git",
-        "url": "file:///home/andrew/Documents/Projects/repoman"
+        "url": "https://github.com/Bullish-Design/repoman"
       },
       "original": {
-        "ref": "main",
+        "ref": "refs/tags/v0.7.5",
         "type": "git",
-        "url": "file:///home/andrew/Documents/Projects/repoman"
+        "url": "https://github.com/Bullish-Design/repoman"
       }
     },
     "root": {
