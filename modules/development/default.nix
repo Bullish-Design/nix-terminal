@@ -12,7 +12,9 @@
     gitCredentialHelper.enable = true;
     settings = {
       git_protocol = "ssh";
-      editor = "nvim";
+      # `nv`, not `nvim`: the fleet names the Neovim launcher `nv`
+      # (see modules/terminal.nix `editorCommand`) and `nvim` is not on PATH.
+      editor = "nv";
       pager = "less -FRSX";
     };
   };
