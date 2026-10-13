@@ -11,8 +11,7 @@ A modular NixOS flake providing comprehensive terminal environment configuration
 This flake is part of a modular approach to NixOS configuration:
 
 - **nix-terminal**: Core terminal environment (this repository)
-- **nixvim**: Neovim configuration (pulled as dependency)
-- **devman**: Development environment management (pulled as dependency)
+- **nix-nvim**: Neovim configuration (pulled as a dependency)
 
 By separating concerns into distinct flakes, you can:
 - Mix and match components based on your needs
@@ -51,7 +50,7 @@ By separating concerns into distinct flakes, you can:
 - **direnv**: Automatic environment loading per directory
 - **fzf**: Fuzzy finder integration for files, history, and more
 - **Git integration**: Pre-configured with sensible defaults
-- **Developer tools**: Via the integrated devman package
+- **Custom packages**: Add packages through `programs.nix-terminal.extraPackages`
 
 ## Installation
 
@@ -283,13 +282,13 @@ A clean, simple prompt for those who prefer minimalism.
 
 ## Integration with Other Flakes
 
-### Nixvim
+### Neovim
 
-This flake automatically integrates with the `nixvim` flake for a complete terminal-based development environment.
+This flake imports the `nix-nvim` Home Manager module for Neovim configuration.
 
-### Devman
+### Personal development tools
 
-Developer environment management tools are included via the `devman` flake, providing project-specific development environments.
+The consuming machine configuration installs personal development tools. This flake does not pin or bundle them.
 
 ### Custom Integrations
 
@@ -371,8 +370,8 @@ The module is structured to:
 ### Flake Inputs
 
 - **nixpkgs**: NixOS package collection
-- **nixvim**: Neovim configuration flake
-- **devman**: Development environment management
+- **nix-nvim**: Neovim configuration flake
+- **nixbuild**: NixOS rebuild testing tools
 
 ### Runtime Dependencies
 
@@ -439,7 +438,6 @@ This project follows the same license as its dependencies. See individual compon
 ## Related Projects
 
 - [nixvim](https://github.com/Bullish-Design/nixvim) - Neovim configuration
-- [devman](https://github.com/Bullish-Design/devman) - Development environment management
 - [Home Manager](https://github.com/nix-community/home-manager) - User environment management
 - [atuin](https://github.com/atuinsh/atuin) - Magical shell history
 - [starship](https://starship.rs/) - Cross-shell prompt

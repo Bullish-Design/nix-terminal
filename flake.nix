@@ -18,19 +18,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    devman = {
-      url = "github:Bullish-Design/devman/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    repoman = {
-      # The developer profile supplies Repoman on $PATH. Resolve it from the
-      # local committed checkout so the profile gets the current 0.7.0 release
-      # without GitHub in its build path.
-      url = "git+https://github.com/Bullish-Design/repoman?ref=refs/tags/v0.7.5";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # DISABLED 2026-08-01: zelligate input commented out (workspace daemon not
     # in use; nix-meta disabled it the same day). Restore together with the
     # output export + modules/zelligate.nix when Phase C returns.
@@ -41,17 +28,15 @@
     # };
   };
 
-  outputs = { self, nix-nvim, devman, nixbuild, repoman, ... }: {
+  outputs = { self, nix-nvim, nixbuild, ... }: {
     homeManagerModules = {
       terminal = import ./modules/terminal.nix {
-        inherit nix-nvim devman;
+        inherit nix-nvim;
       };
       
       nixbuild = import ./modules/nixbuild.nix { 
         inherit nixbuild; 
       };
-
-      repoman = import ./modules/repoman.nix { inherit repoman; };
 
       # DISABLED 2026-08-01 with the input above (see flake.nix zelligate note).
       # zelligate = import ./modules/zelligate.nix { inherit zelligate; };

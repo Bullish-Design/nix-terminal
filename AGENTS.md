@@ -26,8 +26,7 @@ Each module follows a pattern:
 
 | Input | Purpose |
 |-------|---------|
-| `nixvim` | Neovim configuration |
-| `devman` | Development environment tools |
+| `nix-nvim` | Neovim configuration |
 | `nixbuild` | NixOS rebuild testing |
 
 ## Making Changes

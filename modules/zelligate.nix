@@ -1,7 +1,7 @@
 # modules/zelligate.nix
 #
-# nix-terminal enable seam for the zelligate Zellij web workbench, modelled on
-# modules/repoman.nix. zelligate already ships its own Home-Manager module
+# nix-terminal enable seam for the zelligate Zellij web workbench. zelligate
+# already ships its own Home-Manager module
 # (`services.zelligate.*`, defined in the zelligate repo), so this wrapper just
 # imports it and binds the two options that have no in-repo default:
 #

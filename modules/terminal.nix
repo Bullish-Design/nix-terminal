@@ -1,4 +1,4 @@
-{ nix-nvim, devman }:
+{ nix-nvim }:
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -46,32 +46,6 @@ in
       type = types.listOf types.package;
       default = [];
       description = "Additional packages to install";
-    };
-
-    # devman bundles the claude-code and codex-cli CLIs alongside its own
-    # orchestrator (tmuxp + Claude Code + Neovim workspace launcher). Some hosts
-    # install those agents separately (e.g. a dedicated agent profile) — let them
-    # keep the devman orchestrator without shipping duplicate agent binaries.
-    # `enable` defaults true (matching the pre-option behavior of always
-    # installing devman-tools).
-    devman = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Enable the devman workspace orchestrator (tmuxp + Claude Code + Neovim)";
-      };
-
-      withClaudeCode = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Bundle the claude-code CLI into the devman env (sadjow/claude-code-nix)";
-      };
-
-      withCodexCli = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Bundle the codex-cli into the devman env (sadjow/codex-cli-nix)";
-      };
     };
 
     enableGit = mkOption {
@@ -179,15 +153,7 @@ in
     };
 
     # Core terminal packages
-    home.packages = cfg.corePackages
-      ++ lib.optional cfg.devman.enable (
-        devman.lib.mkDevmanEnv {
-          system = pkgs.stdenv.hostPlatform.system;
-          withClaudeCode = cfg.devman.withClaudeCode;
-          withCodexCli = cfg.devman.withCodexCli;
-        }
-      )
-      ++ cfg.extraPackages;
+    home.packages = cfg.corePackages ++ cfg.extraPackages;
 
     # Neovim: the loci-rich config packaged by nix-nvim (supersedes the old
     # nixvim input). Its `enable` defaults off, so activate it with the terminal
